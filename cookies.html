@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie and Local Storage Viewer</title>
+</head>
+<body>
+<h1>Cookie and Local Storage Viewer</h1>
+
+<h2>Cookies:</h2>
+<ul id="cookies-list">
+</ul>
+
+<h2>Local Storage:</h2>
+<ul id="local-storage-list">
+</ul>
+
+<button onclick="clearAll()">Clear All</button>
+
+<script>
+function displayCookies() {
+    var cookiesList = document.getElementById('cookies-list');
+    cookiesList.innerHTML = '';
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        var listItem = document.createElement('li');
+        listItem.textContent = cookie;
+        cookiesList.appendChild(listItem);
+    }
+}
+
+function displayLocalStorage() {
+    var localStorageList = document.getElementById('local-storage-list');
+    localStorageList.innerHTML = '';
+    for (var key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+            var listItem = document.createElement('li');
+            listItem.textContent = key + ': ' + localStorage.getItem(key);
+            localStorageList.appendChild(listItem);
+        }
+    }
+}
+
+function clearAll() {
+    // Clear cookies
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf('=');
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    }
+
+    // Clear local storage
+    localStorage.clear();
+
+    // Refresh the display
+    displayCookies();
+    displayLocalStorage();
+}
+
+// Initial display
+displayCookies();
+displayLocalStorage();
+</script>
+
+</body>
+</html>
